@@ -70,6 +70,43 @@ let verifyemail = async request => {
   }
 };
 
+let checkemail = async request => {
+  try {
+    var postdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: { email: request.email, is_active: false }
+    };
+    let orderdata = await invoke.makeHttpCall("post", "read", postdata);
+    if (orderdata.data.statusMessage != null) {
+      return true
+    }
+    else {
+      return false
+    }
+  } catch (err) {
+    return { status: false };
+  }
+}
+
+let updateuser = async request => {
+  try {
+    request.is_active = true
+    var postdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: request
+    };
+    let orderdata = await invoke.makeHttpCall("post", "userwrite", postdata);
+  } catch (err) {
+    return { status: false };
+  }
+}
+
 module.exports = {
-  verifyemail
+  verifyemail,
+  checkemail,
+  updateuser
 };
