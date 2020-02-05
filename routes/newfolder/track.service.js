@@ -20,7 +20,22 @@ let getOrderDetailFromOrder = async orderid => {
     return { status: false };
   }
 };
+let register=async(data)=>{
+    try{
 
+      var postdata = {
+        url: process.env.DB_URL,
+        client: "auth_user",
+        docType: 0,
+        query: data
+    };
+    console.log(postdata)
+    let registerData = await invoke.makeHttpCall("post", "write", postdata);
+    return registerData.data
+    }catch(error){
+        return false
+    }
+}
 module.exports = {
-  putRecord
+  putRecord,register
 };

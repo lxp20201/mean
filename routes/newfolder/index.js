@@ -15,4 +15,14 @@ module.exports = function(params) {
       app.http.customResponse(res, err, errorCode);
     }
   });
+
+   app.post("/api/registration", async (req, res) => {
+    "use strict";
+    try {
+        let register=await trackSevices.register(req.body)
+    } catch (err) {
+      var errorCode = 402;
+      app.http.customResponse(res, err, errorCode);
+    }
+  });
 };
