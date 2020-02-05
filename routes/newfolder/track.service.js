@@ -1,5 +1,4 @@
 const invoke = require("../../lib/http/invoke");
-const OrderService = require("../order/order.service");
 
 let putRecord = async orderdata => {
   return await OrderService.SaveOrder(orderdata);
