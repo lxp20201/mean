@@ -38,7 +38,8 @@ let verifyemail = async request => {
     readHTMLFile('./configuration/mailandsmsconfig/verifyemail.html', function (err, html) {
       var template = handlebars.compile(html);
       var replacements = {
-        name: request.name
+        name: request.name,
+        email: request.email
       };
       var htmlToSend = template(replacements);
       let HelpOptions = { // function for the details of User and Sender.;
