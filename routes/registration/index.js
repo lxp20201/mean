@@ -1,6 +1,6 @@
 module.exports = function(params) {
   var app = params.app;
-  const trackSevices = require("./track.service");
+  const registerSevices = require("./track.service");
   var moment = require("moment");
   const _ = require("lodash");
   var axios = require('axios');
@@ -19,7 +19,7 @@ module.exports = function(params) {
    app.post("/api/registration", async (req, res) => {
     "use strict";
     try {
-        let register=await trackSevices.register(req.body)
+        let register=await registerSevices.register(req.body)
     } catch (err) {
       var errorCode = 402;
       app.http.customResponse(res, err, errorCode);
