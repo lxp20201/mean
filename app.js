@@ -20,7 +20,7 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, "public")));
 // app.use(express.static(path.join(__dirname, 'public')));
 
-require("./routes/newfolder/index")({ app: app });
+require("./routes/email_verification/index")({ app: app });
 
 app.http = require("./lib/util/http");
 app.util = require("./lib/util/parser");
