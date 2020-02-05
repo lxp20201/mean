@@ -1,8 +1,0 @@
-{
-    "service": "gmail",
-    "useremail": "cintanatestmail@gmail.com",
-    "password": "rahulsaivishnu",
-    "secure": "false",
-    "port": 25,
-    "adminMail" : "rahulsaivishnu@gmail.com"
-}
