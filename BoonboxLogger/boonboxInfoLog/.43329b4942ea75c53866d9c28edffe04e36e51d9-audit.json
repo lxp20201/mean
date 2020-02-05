@@ -1,0 +1,79 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "boonboxLogger\\boonboxInfoLog\\.43329b4942ea75c53866d9c28edffe04e36e51d9-audit.json",
+    "files": [
+        {
+            "date": 1576053688521,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-11-2019",
+            "hash": "61a95738f3f6e861e3f78a902a033832"
+        },
+        {
+            "date": 1576221574313,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-13-2019",
+            "hash": "065966ca4b3172207f49b3b582418124"
+        },
+        {
+            "date": 1576477828526,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-16-2019",
+            "hash": "f0ec001e00fa2de660b0828d96c5c6e7"
+        },
+        {
+            "date": 1576579335684,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-17-2019",
+            "hash": "de4fac4af543412e5d4e09288828a8a2"
+        },
+        {
+            "date": 1576754305062,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-19-2019",
+            "hash": "1a5aee6693ba234b89ed54752950d2fc"
+        },
+        {
+            "date": 1576819384463,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-20-2019",
+            "hash": "5b149c685bb123147a9c42077ebc24ed"
+        },
+        {
+            "date": 1577082590583,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-23-2019",
+            "hash": "0046302b59952d2d149bcb2b6309b7c1"
+        },
+        {
+            "date": 1577429655844,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-27-2019",
+            "hash": "b1e2ef5ad94c4de889cd4e45007385d3"
+        },
+        {
+            "date": 1577682617203,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-30-2019",
+            "hash": "633cc57e48ba7a9389164d21ace9794f"
+        },
+        {
+            "date": 1577766383376,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.12-31-2019",
+            "hash": "603accb1dcccd51d8e5419d6176fdf78"
+        },
+        {
+            "date": 1577943184593,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.01-02-2020",
+            "hash": "acb0a7ccf1e403de2f38badb4f00f6fa"
+        },
+        {
+            "date": 1578288845315,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.01-06-2020",
+            "hash": "9bb0ca97db301cd63e1c8f5724930f61"
+        },
+        {
+            "date": 1578383286751,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.01-07-2020",
+            "hash": "dc4f107121fb74c33d369d75c880a6ec"
+        },
+        {
+            "date": 1578555974342,
+            "name": "boonboxLogger\\boonboxInfoLog\\infoResults.01-09-2020",
+            "hash": "88bdfca94f09382fde3e5693559072b3"
+        }
+    ]
+}
