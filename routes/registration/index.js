@@ -23,7 +23,7 @@ module.exports = function(params) {
         var encrypted_password = pbkdf2.pbkdf2Sync(req.body, 'salt', 1, 32, 'sha512')
 
         let register=await registerSevices.register(req.body)
-        app.http.customResponse(res, {success : true, message : "Email Sent Successfully",register}, 200);
+        app.http.customResponse(res, {success : true, message : "User registered successfully",register}, 200);
     } catch (err) {
       var errorCode = 402;
       app.http.customResponse(res, err, errorCode);
