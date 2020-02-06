@@ -2,6 +2,10 @@ const invoke = require("../../lib/http/invoke");
 var nodemailer = require('nodemailer');
 var handlebars = require('handlebars');
 var fs = require("fs");
+var mysql = require('mysql');
+var connection = mysql.createConnection(process.env.MYSQL_DB);
+const util = require('util');
+const query = util.promisify(connection.query).bind(connection);
 
 //To get the order details.
 let verifyemail = async request => {
@@ -57,14 +61,6 @@ let verifyemail = async request => {
       });
     });
     return true
-    // var postdata = {
-    //   url: process.env.DB_URL,
-    //   client: "orders",
-    //   docType: 0,
-    //   query: { _id: orderid }
-    // };
-    // let orderdata = await invoke.makeHttpCall("post", "read", postdata);
-    // return orderdata.data.statusMessage;
   } catch (err) {
     return { status: false };
   }
@@ -72,17 +68,11 @@ let verifyemail = async request => {
 
 let checkemail = async request => {
   try {
-    var postdata = {
-      url: process.env.DB_URL,
-      client: "auth_user",
-      docType: 0,
-      query: { email: request.email, is_active: false }
-    };
-    let orderdata = await invoke.makeHttpCall("post", "read", postdata);
-    if (orderdata.data.statusMessage != null) {
+    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = "+ 0);
+    if(rows.length > 0){
       return true
     }
-    else {
+    else{
       return false
     }
   } catch (err) {
@@ -92,14 +82,22 @@ let checkemail = async request => {
 
 let updateuser = async request => {
   try {
-    request.is_active = true
-    var postdata = {
-      url: process.env.DB_URL,
-      client: "auth_user",
-      docType: 0,
-      query: request
-    };
-    let orderdata = await invoke.makeHttpCall("post", "userwrite", postdata);
+    const rows = await query("UPDATE auth_user set is_active = " + 1 + " where email='" + request.email + "'");
+    console.log(rows);
+  } catch (err) {
+    return { status: false };
+  }
+}
+
+let getuserdetails = async request => {
+  try {
+    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = "+ 1);
+    if(rows.length > 0){
+      return rows[0]
+    }
+    else{
+      return false
+    }
   } catch (err) {
     return { status: false };
   }
@@ -108,5 +106,6 @@ let updateuser = async request => {
 module.exports = {
   verifyemail,
   checkemail,
-  updateuser
+  updateuser,
+  getuserdetails
 };
