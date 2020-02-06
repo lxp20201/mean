@@ -29,10 +29,11 @@ let register=async(data)=>{
         docType: 0,
         query: data
     };
-    console.log(postdata)
+
     let registerData = await invoke.makeHttpCall("post", "write", postdata);
     return registerData.data
     }catch(error){
+    console.log(error)
         return false
     }
 }
