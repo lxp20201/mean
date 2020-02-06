@@ -20,11 +20,16 @@ module.exports = function(params) {
    app.post("/api/registration", async (req, res) => {
     "use strict";
     try {
-        var encrypted_password = pbkdf2.pbkdf2Sync(req.body, 'salt', 1, 32, 'sha512')
-
-        let register=await registerSevices.register(req.body)
+        var encrypted_password = await registerSevices.hashPassword(req.body.password)
+        req.body.password = encrypted_password
+        req.body.is_superuser = 0
+        req.body.is_staff = 0
+        req.body.is_active = 0
+        req.body.date_joined = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        let register= await registerSevices.register(req.body)
         app.http.customResponse(res, {success : true, message : "User registered successfully",register}, 200);
     } catch (err) {
+      console.log(err)
       var errorCode = 402;
       app.http.customResponse(res, err, errorCode);
     }
