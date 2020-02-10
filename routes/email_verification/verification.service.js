@@ -15,17 +15,16 @@ let verifyemail = async request => {
     // Define to JSON type
     var jsonContent = JSON.parse(contents);
     // Logic For Sending Mail
-    var readHTMLFile = function (path, callback) {
-      fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
-        if (err) {
-          callback(err);
-        }
-        else {
-          callback(null, html);
-        }
-      });
+    const readFile = util.promisify(fs.readFile);
+    var html_path = "./configuration/mailandsmsconfig/verifyemail.html";
+    var outcome = await readFile(html_path, { encoding: 'utf-8' });
+    var template = handlebars.compile(outcome);
+    var replacements = {
+      name: request.name,
+      email: request.email
     };
-    // Logic For Sending Mail
+    var htmlToSend = template(replacements);
+    // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
       service: jsonContent.service,
       secure: jsonContent.secure,
@@ -38,29 +37,16 @@ let verifyemail = async request => {
         rejectUnauthorized: false
       }
     });
-    //changepasswordmail
-    readHTMLFile('./configuration/mailandsmsconfig/verifyemail.html', function (err, html) {
-      var template = handlebars.compile(html);
-      var replacements = {
-        name: request.name,
-        email: request.email
-      };
-      var htmlToSend = template(replacements);
-      let HelpOptions = { // function for the details of User and Sender.;
-        from: jsonContent.useremail + ' <Cintana Edu-Tech>',
-        to: request.email,
-        subject: "Edu-Tech Verification Mail",
-        html: htmlToSend
-      };
-      transporter.sendMail(HelpOptions, (error, info) => { //Report information whether mail has sent or not
-        if (error) {
-          //   callback(error);
-        } else {
-          callback(null, info.response[0]);
-        }
-      });
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: "'" + jsonContent.useremail + " " + "<Cintana Edu-Tech>" + "'",
+      to: request.email,
+      subject: "Edu-Tech Verification Mail",
+      html: htmlToSend
     });
-    return true
+    if(info.messageId != undefined){
+      return true
+    }
   } catch (err) {
     return { status: false };
   }
@@ -68,11 +54,11 @@ let verifyemail = async request => {
 
 let checkemail = async request => {
   try {
-    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = "+ 0);
-    if(rows.length > 0){
+    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = " + 0);
+    if (rows.length > 0) {
       return true
     }
-    else{
+    else {
       return false
     }
   } catch (err) {
@@ -91,11 +77,11 @@ let updateuser = async request => {
 
 let getuserdetails = async request => {
   try {
-    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = "+ 1);
-    if(rows.length > 0){
+    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = " + 1);
+    if (rows.length > 0) {
       return rows[0]
     }
-    else{
+    else {
       return false
     }
   } catch (err) {
