@@ -42,9 +42,8 @@ let register = async (data) => {
 
 let externalregistration = async (request) => {
   try {
-    var payload = qs.stringify(request);
+    var payload = request;
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
-    console.log(response.data);
     if (response.data.success == true) {
       var postdata = {
         url: process.env.DB_URL,
@@ -59,8 +58,7 @@ let externalregistration = async (request) => {
       return response.data
     }
   } catch (error) {
-    console.log(error)
-    return false
+    return error.response.data
   }
 }
 

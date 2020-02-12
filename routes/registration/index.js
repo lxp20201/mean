@@ -28,9 +28,7 @@ module.exports = function (params) {
         app.http.customResponse(res, { success: false, message: registration_response }, 200);
       }
     } catch (err) {
-      console.log(err)
-      var errorCode = 402;
-      app.http.customResponse(res, err, errorCode);
+      app.http.customResponse(res, { success: false, message: registration_response }, 200);
     }
   });
 };
