@@ -45,6 +45,7 @@ let externalregistration = async (request) => {
     var payload = request;
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
     if (response.data.success == true) {
+      request.is_active = false
       var postdata = {
         url: process.env.DB_URL,
         client: "auth_user",
