@@ -42,7 +42,7 @@ let register = async (data) => {
 
 let externalregistration = async (request) => {
   try {
-    var payload = qs.stringify(request);
+    var payload = request;
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
     if (response.data.success == true) {
       var postdata = {
