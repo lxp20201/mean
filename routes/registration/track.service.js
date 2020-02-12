@@ -6,6 +6,7 @@ const util = require('util');
 const query = util.promisify(connection.query).bind(connection);
 var pbkdf2 = require('pbkdf2')
 const passwordHash = require('pbkdf2-password-hash')
+const qs = require('querystring');
 
 let putRecord = async orderdata => {
   return await OrderService.SaveOrder(orderdata);
@@ -28,30 +29,41 @@ let getOrderDetailFromOrder = async orderid => {
   }
 };
 
-let register=async(data)=>{
-    try{
+let register = async (data) => {
+  try {
 
     const rows = await query("INSERT INTO auth_user (username, first_name, last_name, password, is_superuser, email, is_staff, is_active, date_joined) VALUES ('" + data.username + "', '" + data.name + "', '" + data.last_name + "', '" + data.password + "', '" + data.is_superuser + "', '" + data.email + "', '" + data.is_staff + "', '" + data.is_active + "', '" + data.date_joined + "');")
     console.log(rows);
-    }catch(error){
+  } catch (error) {
     console.log(error)
-        return false
-    }
+    return false
+  }
 }
 
-function hashPassword(password) {
-  // const salt = crypto.randomBytes(16).toString('hex');
-  // var key = crypto.pbkdf2Sync(password, input.salt, input.iterations, input.length)
-  // const hash = crypto.pbkdf2Sync(password, salt, 2048, 32, 'sha256').toString('hex');
-  // return [salt, hash].join('$');
-  return passwordHash.hash(password, {iterations: 36000, digest: 'sha256', saltlen: 16})
-.then((hash) => {
-  console.log('pbkdf2_'+hash,'llllllllllllllllllllllll')
-  //> hash === 'sha1$100$16$fwzPKhZjCQSZMz+hY7A29A==$KdGdduxkKd08FDUuUVDVRQ=='
-})
-  // return encrypted_password
+let externalregistration = async (request) => {
+  try {
+    var payload = qs.stringify(request);
+    var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
+    console.log(response.data);
+    if (response.data.success == true) {
+      var postdata = {
+        url: process.env.DB_URL,
+        client: "auth_user",
+        docType: 0,
+        query: request
+      };
+      let responsedata = await invoke.makeHttpCall("post", "write", postdata);
+      return true;
+    }
+    else {
+      return response.data
+    }
+  } catch (error) {
+    console.log(error)
+    return false
   }
+}
 
 module.exports = {
-  putRecord,register,hashPassword
+  putRecord, register, externalregistration
 };
