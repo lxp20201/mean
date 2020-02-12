@@ -39,12 +39,12 @@ let verifyemail = async request => {
     });
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: jsonContent.useremail + " " + "<CintanaEdu-Tech>" ,
+      from: jsonContent.useremail + " " + "<CintanaEdu-Tech>",
       to: request.email,
       subject: "Edu-Tech Verification Mail",
       html: htmlToSend
     });
-    if(info.messageId != undefined){
+    if (info.messageId != undefined) {
       return true
     }
   } catch (err) {
@@ -68,8 +68,33 @@ let checkemail = async request => {
 
 let updateuser = async request => {
   try {
-    const rows = await query("UPDATE auth_user set is_active = " + 1 + " where email='" + request.email + "'");
-    console.log(rows);
+    var readdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: { _id: request._id }
+    };
+    let response_data = await invoke.makeHttpCall("post", "read", readdata);
+    if (response_data.data.statusMessage != undefined) {
+      if (response_data.data.statusMessage.is_active == false) {
+        request.is_active = true
+        var postdata = {
+          url: process.env.DB_URL,
+          client: "auth_user",
+          docType: 0,
+          query: request
+        };
+        let responsedata = await invoke.makeHttpCall("post", "userwrite", postdata);
+        const rows = await query("UPDATE auth_user set is_active = " + 1 + " where email='" + request.email + "'");
+        return true
+      }
+      else {
+        return "User Already Verified"
+      }
+    }
+    else {
+      return "No Data Exists"
+    }
   } catch (err) {
     return { status: false };
   }
