@@ -17,12 +17,12 @@ module.exports = function (params) {
     }
   });
 
-  app.post("/lmsregistration", async (req, res) => {
+  app.post("/registration", async (req, res) => {
     "use strict";
     try {
       var registration_response = await registerSevices.externalregistration(req.body)
-      if(registration_response == true){
-        app.http.customResponse(res, { success: true, message: "User registered successfully" }, 200);
+      if(registration_response.status == true){
+        app.http.customResponse(res, { success: true, message: "User registered successfully", csrftoken : registration_response.csrftoken, user_detail : registration_response.user_detail }, 200);
       }
       else{
         app.http.customResponse(res, { success: false, message: registration_response }, 200);
