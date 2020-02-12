@@ -29,11 +29,18 @@ let getOrderDetailFromOrder = async orderid => {
   }
 };
 
-let register = async (data) => {
+let update_status = async (data) => {
   try {
-
-    const rows = await query("INSERT INTO auth_user (username, first_name, last_name, password, is_superuser, email, is_staff, is_active, date_joined) VALUES ('" + data.username + "', '" + data.name + "', '" + data.last_name + "', '" + data.password + "', '" + data.is_superuser + "', '" + data.email + "', '" + data.is_staff + "', '" + data.is_active + "', '" + data.date_joined + "');")
-    console.log(rows);
+    var user = data.username;
+    const response = await query("UPDATE auth_user SET is_active = 1 WHERE username = '" + user + "'")
+    request.is_active = true
+      var postdata = {
+        url: process.env.DB_URL,
+        client: "auth_user",
+        docType: 0,
+        query: request
+      };
+      let responsedata = await invoke.makeHttpCall("post", "userwrite", postdata);
   } catch (error) {
     console.log(error)
     return false
@@ -72,5 +79,5 @@ let externalregistration = async (request) => {
 }
 
 module.exports = {
-  putRecord, register, externalregistration
+  putRecord, update_status, externalregistration
 };

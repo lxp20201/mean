@@ -17,6 +17,21 @@ module.exports = function (params) {
     }
   });
 
+  app.post("/updatestatus", async (req, res) => {
+    "use strict";
+    try {
+      var registration_response = await registerSevices.update_status(req.body)
+      if(registration_response.status == true){
+        app.http.customResponse(res, { success: true, message: "Account is activated", csrftoken : registration_response.csrftoken, user_detail : registration_response.user_detail }, 200);
+      }
+      else{
+        app.http.customResponse(res, { success: false, message: registration_response }, 200);
+      }
+    } catch (err) {
+      app.http.customResponse(res, { success: false, message: registration_response }, 200);
+    }
+  });
+
   app.post("/registration", async (req, res) => {
     "use strict";
     try {
