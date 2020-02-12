@@ -17,7 +17,7 @@ module.exports = function (params) {
     }
   });
 
-  app.post("/lmsregistration", async (req, res) => {
+  app.post("/registration", async (req, res) => {
     "use strict";
     try {
       var registration_response = await registerSevices.externalregistration(req.body)
