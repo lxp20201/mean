@@ -17,7 +17,7 @@ module.exports = function (params) {
         }
       } catch (err) {
         var errorCode = 402;
-        app.http.customResponse(res, err, errorCode);
+        app.http.customResponse(res,{ success:false , message:err.response.data}, errorCode);
       }
     });  
 
