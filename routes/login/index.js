@@ -13,7 +13,7 @@ module.exports = function (params) {
                 app.http.customResponse(res, { success: true, message: "Login Successfully" }, 200); 
               }
         }else{
-            app.http.customResponse(res, { success: true, message: "Email or password is incorrect" }, 200);
+            app.http.customResponse(res, { success: false, message: "Email or password is incorrect" }, 200);
         }
       } catch (err) {
         var errorCode = 402;
