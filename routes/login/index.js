@@ -8,10 +8,13 @@ module.exports = function (params) {
       try {
         var check_email_status = await loginservice.checkemail(req.body);
         if(check_email_status.statusMessage.length != 0){
-            let redata = await trigger.makeHttpCallpolyglot("post","/user_api/v1/account/login_session/",req.body);
-              console.log(redata);
+            let redata = await trigger.openedxCall("post","/user_api/v1/account/login_session/",req.body);
+              if(redata.data == ""){
+                app.http.customResponse(res, { success: true, message: "Login Successfully" }, 200); 
+              }
+        }else{
+            app.http.customResponse(res, { success: true, message: "Email or password is incorrect" }, 200);
         }
-        console.log(check_email_status)
       } catch (err) {
         var errorCode = 402;
         app.http.customResponse(res, err, errorCode);
