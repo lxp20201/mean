@@ -52,7 +52,15 @@ let externalregistration = async (request) => {
         query: request
       };
       let responsedata = await invoke.makeHttpCall("post", "write", postdata);
-      return true;
+      request._id = responsedata.data.iid
+      var cookie = response.headers['set-cookie'][0];
+      var csrftoken = cookie.split(';');
+      var result = {
+        status: true,
+        csrftoken: csrftoken[0].slice(10),
+        user_detail: request
+      }
+      return result;
     }
     else {
       return response.data
