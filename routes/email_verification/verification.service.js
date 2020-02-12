@@ -39,7 +39,7 @@ let verifyemail = async request => {
     });
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: "'" + jsonContent.useremail + " " + "<Cintana Edu-Tech>" + "'",
+      from: jsonContent.useremail + " " + "<CintanaEdu-Tech>" ,
       to: request.email,
       subject: "Edu-Tech Verification Mail",
       html: htmlToSend
