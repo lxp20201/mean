@@ -24,6 +24,7 @@ app.use(cors());
 
 require("./routes/email_verification/index")({ app: app });
 require("./routes/registration/index")({ app: app });
+require("./routes/login/index")({ app: app });
 
 app.http = require("./lib/util/http");
 app.util = require("./lib/util/parser");
