@@ -15,7 +15,9 @@ function connectDB(url, callBack) {
       //console.log("error variable",err,"db variable",db)
       if (err) {
         callBack(null, err);
+        console.log(err);
       } else {
+        console.log(db);
         callBack(db.db("dev_openedx"),db, null);
       }
     }
