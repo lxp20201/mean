@@ -102,13 +102,26 @@ let updateuser = async request => {
 
 let getuserdetails = async request => {
   try {
-    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = " + 1);
-    if (rows.length > 0) {
-      return rows[0]
+    var readdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: { email: request.email }
+    };
+    let response_data = await invoke.makeHttpCall("post", "read", readdata);
+    if(response_data.data.statusMessage != undefined){
+      return response_data.data.statusMessage
     }
-    else {
+    else{
       return false
     }
+    // const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = " + 1);
+    // if (rows.length > 0) {
+    //   return rows[0]
+    // }
+    // else {
+    //   return false
+    // }
   } catch (err) {
     return { status: false };
   }
