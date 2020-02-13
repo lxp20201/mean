@@ -51,6 +51,7 @@ let externalregistration = async (request) => {
   try {
     var payload = request;
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
+    console.log(response.data);
     if (response.data.success == true) {
       request.is_active = false
       var postdata = {
@@ -61,6 +62,7 @@ let externalregistration = async (request) => {
       };
       let responsedata = await invoke.makeHttpCall("post", "write", postdata);
       request._id = responsedata.data.iid
+      console.log(request._id);
       var cookie = response.headers['set-cookie'][0];
       var csrftoken = cookie.split(';');
       var result = {
@@ -68,6 +70,7 @@ let externalregistration = async (request) => {
         csrftoken: csrftoken[0].slice(10),
         user_detail: request
       }
+      console.log(result);
       return result;
     }
     else {
