@@ -54,13 +54,31 @@ let verifyemail = async request => {
 
 let checkemail = async request => {
   try {
-    const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = " + 0);
-    if (rows.length > 0) {
-      return true
+    var readdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: { email: request.email }
+    };
+    let response_data = await invoke.makeHttpCall("post", "read", readdata);
+    if(response_data.data.statusMessage != undefined){
+      if(response_data.data.statusMessage.is_active == false){
+        return true
+      }
+      else{
+        return "Email Address is Already verified"
+      }
     }
-    else {
-      return false
+    else{
+      return "No User Information found with this Email Id"
     }
+    // const rows = await query("select * from auth_user where email='" + request.email + "' and is_active = " + 0);
+    // if (rows.length > 0) {
+    //   return true
+    // }
+    // else {
+    //   return false
+    // }
   } catch (err) {
     return { status: false };
   }

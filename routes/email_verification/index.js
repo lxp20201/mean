@@ -20,7 +20,7 @@ module.exports = function (params) {
         }
       }
       else {
-        app.http.customResponse(res, { success: false, message: "Email Already Verified" }, 200);
+        app.http.customResponse(res, { success: false, message: check_email_status }, 200);
       }
     } catch (err) {
       var errorCode = 402;
