@@ -77,6 +77,7 @@ let externalregistration = async (request) => {
       return response.data
     }
   } catch (error) {
+    console.log(error);
     return error.response.data
   }
 }
