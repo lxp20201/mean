@@ -16,7 +16,7 @@ function connectDB(url, callBack) {
       if (err) {
         callBack(null, err);
       } else {
-        callBack(db.db("dev_openedx"),db, null);
+        callBack(db.db("workspace"),db, null);
       }
     }
   );
