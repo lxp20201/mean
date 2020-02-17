@@ -160,10 +160,25 @@ let deleteuser = async request => {
   }
 }
 
+let getmysqldetailsfromserver = async request => {
+  try {
+    const rows = await query("select * from auth_user where email ='" + request.email + "'");
+    if (rows.length > 0) {
+      return rows[0]
+    }
+    else {
+      return false
+    }
+  } catch (err) {
+    return { status: false };
+  }
+}
+
 module.exports = {
   verifyemail,
   checkemail,
   updateuser,
   getuserdetails,
-  deleteuser
+  deleteuser,
+  getmysqldetailsfromserver
 };

@@ -69,6 +69,22 @@ module.exports = function (params) {
         app.http.customResponse(res, { success: true, message: "User Deleted Successfully" }, 200);
       }
       else {
+        app.http.customResponse(res, { success: false, message: "Error while deleting user details" }, 200);
+      }
+    } catch (err) {
+      var errorCode = 402;
+      app.http.customResponse(res, err, errorCode);
+    }
+  });
+
+  app.post("/getmysqldetailsfromserver", async (req, res) => {
+    "use strict";
+    try {
+      var get_updated_data = await trackSevices.getmysqldetailsfromserver(req.body);
+      if (get_updated_data != false) {
+        app.http.customResponse(res, { success: true, message: get_updated_data }, 200);
+      }
+      else {
         app.http.customResponse(res, { success: false, message: "Error while getting user details" }, 200);
       }
     } catch (err) {
