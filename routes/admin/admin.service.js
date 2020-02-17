@@ -10,18 +10,23 @@ const query = util.promisify(connection.query).bind(connection);
 //To get the order details.
 let adminuserdashboard = async request => {
     try {
-        var readdata = {
-            url: process.env.DB_URL,
-            client: "auth_user",
-            docType: 1,
-            query: { is_staff: request.is_staff, is_superuser : false }
-        };
-        let response_data = await invoke.makeHttpCall("post", "read", readdata);
-        if (response_data.data.statusMessage != undefined) {
-            return response_data.data.statusMessage
-        }
-        else {
+        if(request.is_staff == undefined){
             return false
+        }
+        else{
+            var readdata = {
+                url: process.env.DB_URL,
+                client: "auth_user",
+                docType: 1,
+                query: { is_staff: request.is_staff, is_superuser : false }
+            };
+            let response_data = await invoke.makeHttpCall("post", "read", readdata);
+            if (response_data.data.statusMessage != undefined) {
+                return response_data.data.statusMessage
+            }
+            else {
+                return false
+            }
         }
     } catch (err) {
         return { status: false };
