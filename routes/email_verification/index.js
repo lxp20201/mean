@@ -60,4 +60,20 @@ module.exports = function (params) {
       app.http.customResponse(res, err, errorCode);
     }
   });
+
+  app.post("/deleteuser", async (req, res) => {
+    "use strict";
+    try {
+      var get_updated_data = await trackSevices.deleteuser(req.body);
+      if (get_updated_data != false) {
+        app.http.customResponse(res, { success: true, message: "User Deleted Successfully" }, 200);
+      }
+      else {
+        app.http.customResponse(res, { success: false, message: "Error while getting user details" }, 200);
+      }
+    } catch (err) {
+      var errorCode = 402;
+      app.http.customResponse(res, err, errorCode);
+    }
+  });
 };
