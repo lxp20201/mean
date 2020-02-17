@@ -50,6 +50,7 @@ let update_status = async (data) => {
 let externalregistration = async (request) => {
   try {
     var payload = request;
+    request.is_superuser = 1
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
     console.log(response.data);
     if (response.data.success == true) {
