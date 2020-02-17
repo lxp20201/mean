@@ -22,6 +22,7 @@ app.use(cors());
 // app.use(express.static(path.join(__dirname, "public")));
 // app.use(express.static(path.join(__dirname, 'public')));
 
+require("./routes/admin/index")({ app: app });
 require("./routes/email_verification/index")({ app: app });
 require("./routes/registration/index")({ app: app });
 require("./routes/login/index")({ app: app });
