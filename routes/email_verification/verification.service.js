@@ -147,7 +147,7 @@ let getuserdetails = async request => {
 
 let deleteuser = async request => {
   try {
-    const rows = await query("Delete from auth_user where email='" + request.email);
+    const rows = await query(" SET FOREIGN_KEY_CHECKS = 0; delete from auth_user where email ='" + request.email + "'");
     if (rows.length > 0) {
       return rows[0]
     }
