@@ -53,6 +53,7 @@ let externalregistration = async (request) => {
     console.log(response.data);
     if (response.data.success == true) {
       request.is_active = false
+      request.is_superuser = false
       var postdata = {
         url: process.env.DB_URL,
         client: "auth_user",

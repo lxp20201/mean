@@ -145,9 +145,75 @@ let getuserdetails = async request => {
   }
 }
 
+let deleteuser = async request => {
+  try {
+    const rowsa = await query("SET FOREIGN_KEY_CHECKS = 0");
+    const rows = await query("delete from auth_user where email ='" + request.email + "'");
+    if (rows.affectedRows > 0) {
+      return true
+    }
+    else {
+      return false
+    }
+  } catch (err) {
+    return { status: false };
+  }
+}
+
+let getmysqldetailsfromserver = async request => {
+  try {
+    const rows = await query("select * from auth_user where email ='" + request.email + "'");
+    if (rows.length > 0) {
+      return rows[0]
+    }
+    else {
+      return false
+    }
+  } catch (err) {
+    return { status: false };
+  }
+}
+
+let updatesuperuserstatus = async request => {
+  try {
+    var readdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: { _id: request._id }
+    };
+    let response_data = await invoke.makeHttpCall("post", "read", readdata);
+    if (response_data.data.statusMessage != undefined) {
+      if (response_data.data.statusMessage.is_superuser == false) {
+        request.is_superuser = true
+        var postdata = {
+          url: process.env.DB_URL,
+          client: "auth_user",
+          docType: 0,
+          query: request
+        };
+        let responsedata = await invoke.makeHttpCall("post", "userwrite", postdata);
+        const rows = await query("UPDATE auth_user set is_superuser = " + 1 + " where email='" + request.email + "'");
+        return true
+      }
+      else {
+        return "Super User Already Verified"
+      }
+    }
+    else {
+      return "No Data Exists"
+    }
+  } catch (err) {
+    return { status: false };
+  }
+}
+
 module.exports = {
   verifyemail,
   checkemail,
   updateuser,
-  getuserdetails
+  getuserdetails,
+  deleteuser,
+  getmysqldetailsfromserver,
+  updatesuperuserstatus
 };
