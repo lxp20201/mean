@@ -10,6 +10,7 @@ const qs = require('querystring');
 
 let addcourse = async request => {
     try {
+        request.is_active = true
         var postdata = {
             url: process.env.DB_URL,
             client: "course",
@@ -30,15 +31,20 @@ let addcourse = async request => {
 
 let viewcourse = async request => {
     try {
-        var postdata = {
-            url: process.env.DB_URL,
-            client: "course",
-            docType: 1,
-            query: {user_id : request.user_id}
-        };
-        let coursedata = await invoke.makeHttpCall("post", "read", postdata);
-        if (coursedata.data.statusMessage != undefined) {
-            return coursedata.data.statusMessage
+        if (request.user_id != undefined) {
+            var postdata = {
+                url: process.env.DB_URL,
+                client: "course",
+                docType: 1,
+                query: { user_id: request.user_id, is_active: true }
+            };
+            let coursedata = await invoke.makeHttpCall("post", "read", postdata);
+            if (coursedata.data.statusMessage != undefined) {
+                return coursedata.data.statusMessage
+            }
+            else {
+                return false
+            }
         }
         else {
             return false
