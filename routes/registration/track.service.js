@@ -97,26 +97,33 @@ let passwordencrypt = async (data) => {
     var getdata = {
       url: process.env.DB_URL,
       client: "auth_user",
-      docType: 0,
+      docType: 1,
       query: { email: data.email}
     };
     let userdata = await invoke.makeHttpCall("post", "read", getdata);
-    userdata.data.statusMessage.password=data.password;
+    userdata.data.statusMessage[0].password=data.password;
+    if(userdata.data.statusMessage.length != 0){
     var updatedata = {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 0,
-      query: userdata.data.statusMessage
+      query: userdata.data.statusMessage[0]
     };
-    let mongo_data = await invoke.makeHttpCall("post", "userwrite", updatedata);
+    let mongo_data = await invoke.makeHttpCall("post", "userwrite", updatedata);  
     if(mongo_data.data.statusMessage.ok == 1){
-     const response = await query("UPDATE auth_user SET password ="+final_password +" WHERE email = '" + data.email + "'")
-      console.log(response)
-    return final_password; 
+     const response = await query("UPDATE auth_user SET password = '"+final_password +"' WHERE email = '"+data.email+"'")
+      if(response.changedRows != 0){
+        return final_password;
+      }else{
+        return "polyglot doesn't update the password";
+      }
+     
     }else{
       return "user email doesn't exist";
     }
-
+  }else{
+    return "user email doesn't exist";
+  }
   } catch (error) {
     return error.response.data
   }

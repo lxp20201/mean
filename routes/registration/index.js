@@ -21,9 +21,9 @@ module.exports = function (params) {
     "use strict";
     try{
     var password_response = await registerSevices.passwordencrypt(req.body);  
-      app.http.customResponse(res, { success: false, message: password_response }, 200);
+      app.http.customResponse(res, { success: true, message: "Password updated successfully"}, 200);
   } catch (err) {
-    app.http.customResponse(res, { success: false, message: password_response }, 200);
+    app.http.customResponse(res, { success: false, message: err }, 200);
   }
 });
 
