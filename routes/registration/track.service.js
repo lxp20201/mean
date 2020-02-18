@@ -94,7 +94,29 @@ let passwordencrypt = async (data) => {
     var iterations = 36000;
     const hashPassword = pbkdf2.pbkdf2Sync(password, salt2, iterations, 32, "sha256").toString("base64");  
     var final_password = 'pbkdf2_sha256$36000$'+salt2+'$'+hashPassword;
+    var getdata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: { email: data.email}
+    };
+    let userdata = await invoke.makeHttpCall("post", "read", getdata);
+    userdata.data.statusMessage.password=data.password;
+    var updatedata = {
+      url: process.env.DB_URL,
+      client: "auth_user",
+      docType: 0,
+      query: userdata.data.statusMessage
+    };
+    let mongo_data = await invoke.makeHttpCall("post", "userwrite", updatedata);
+    if(mongo_data.data.statusMessage.ok == 1){
+     const response = await query("UPDATE auth_user SET password ="+final_password +" WHERE email = '" + data.email + "'")
+      console.log(response)
     return final_password; 
+    }else{
+      return "user email doesn't exist";
+    }
+
   } catch (error) {
     return error.response.data
   }
