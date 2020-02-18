@@ -17,6 +17,16 @@ module.exports = function (params) {
     }
   });
 
+  app.post("/passwordencrypt", async (req, res) => {
+    "use strict";
+    try{
+    var password_response = await registerSevices.passwordencrypt(req.body);  
+      app.http.customResponse(res, { success: false, message: password_response }, 200);
+  } catch (err) {
+    app.http.customResponse(res, { success: false, message: password_response }, 200);
+  }
+});
+
   app.post("/updatestatus", async (req, res) => {
     "use strict";
     try {

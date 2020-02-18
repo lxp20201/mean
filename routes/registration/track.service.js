@@ -4,9 +4,8 @@ var mysql = require('mysql');
 var connection = mysql.createConnection(process.env.MYSQL_DB);
 const util = require('util');
 const query = util.promisify(connection.query).bind(connection);
-var pbkdf2 = require('pbkdf2')
-const passwordHash = require('pbkdf2-password-hash')
-const qs = require('querystring');
+const pbkdf2 = require('pbkdf2')
+var randomstring = require("randomstring");
 
 let putRecord = async orderdata => {
   return await OrderService.SaveOrder(orderdata);
@@ -82,6 +81,24 @@ let externalregistration = async (request) => {
   }
 }
 
+let passwordencrypt = async (data) => {
+  try {
+    var user = data.email;
+    var password = data.password;
+
+    var salt2 = randomstring.generate({
+      length: 12,
+      charset: 'alphabetic'
+    });
+    var iterations = 36000;
+    const hashPassword = pbkdf2.pbkdf2Sync(password, salt2, iterations, 32, "sha256").toString("base64");  
+    var final_password = 'pbkdf2_sha256$36000$'+salt2+'$'+hashPassword;
+    return final_password; 
+  } catch (error) {
+    return error.response.data
+  }
+}
+
 module.exports = {
-  putRecord, update_status, externalregistration
+  putRecord, update_status, externalregistration, passwordencrypt
 };
