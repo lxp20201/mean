@@ -100,9 +100,9 @@ let passwordencrypt = async (data) => {
       docType: 1,
       query: { email: data.email}
     };
-    let userdata = await invoke.makeHttpCall("post", "read", getdata);
-    userdata.data.statusMessage[0].password=data.password;
+    let userdata = await invoke.makeHttpCall("post", "read", getdata);    
     if(userdata.data.statusMessage.length != 0){
+      userdata.data.statusMessage[0].password=data.password;
     var updatedata = {
       url: process.env.DB_URL,
       client: "auth_user",
@@ -113,7 +113,7 @@ let passwordencrypt = async (data) => {
     if(mongo_data.data.statusMessage.ok == 1){
      const response = await query("UPDATE auth_user SET password = '"+final_password +"' WHERE email = '"+data.email+"'")
       if(response.changedRows != 0){
-        return final_password;
+        return "Password updated successfully";
       }else{
         return "polyglot doesn't update the password";
       }
