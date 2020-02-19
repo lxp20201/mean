@@ -41,7 +41,7 @@ module.exports = function (params) {
         }
       }
       else {
-        app.http.customResponse(res, { success: false, message: "Error in triggering mail" }, 200);
+        app.http.customResponse(res, { success: false, message: insert_mailid }, 200);
       }
     } catch (err) {
       var errorCode = 402;

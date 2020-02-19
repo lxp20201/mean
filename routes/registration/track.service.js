@@ -178,7 +178,7 @@ let checklink = async (data) => {
         }
       }
       else {
-        return 'Link Verified'
+        return 'Link Already Verified'
       }
     }
     else {

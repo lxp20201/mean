@@ -25,7 +25,7 @@ module.exports = function (params) {
         req.body._id = check_link._id
         var updatefp = await registerSevices.updatelinkstatus(req.body);
         if (updatefp == true) {
-          app.http.customResponse(res, { success: true, message: "Link Deactivated Successfully" }, 200);
+          app.http.customResponse(res, { success: true, message: "Link Verified Successfully" }, 200);
         }
         else {
           app.http.customResponse(res, { success: false, message: "Error in updating Link" }, 200);

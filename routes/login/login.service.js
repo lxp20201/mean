@@ -82,47 +82,59 @@ let sendforgotpasswordmail = async request => {
 
 let insertmailtofp = async request => {
   try {
-    var postdata = {
+    var post_data = {
       url: process.env.DB_URL,
-      client: "forgotpassword",
+      client: "auth_user",
       docType: 0,
       query: { email: request.email }
     };
-    let re_data = await invoke.makeHttpCall("post", "read", postdata);
-    if(re_data.data.statusMessage != undefined){
-      var fpdata = re_data.data.statusMessage
-      fpdata.is_active = true
-      fpdata.valid_date = moment().format("YYYY-MM-DD");
-      var insertdata = {
+    let readata = await invoke.makeHttpCall("post", "read", post_data);
+    if (readata.data.statusMessage != undefined) {
+      var postdata = {
         url: process.env.DB_URL,
         client: "forgotpassword",
         docType: 0,
-        query: fpdata
+        query: { email: request.email }
       };
-      let redata = await invoke.makeHttpCall("post", "write", insertdata);
-      if(redata.data.errorMessage == null){
-        return true
+      let re_data = await invoke.makeHttpCall("post", "read", postdata);
+      if(re_data.data.statusMessage != undefined){
+        var fpdata = re_data.data.statusMessage
+        fpdata.is_active = true
+        fpdata.valid_date = moment().format("YYYY-MM-DD");
+        var insertdata = {
+          url: process.env.DB_URL,
+          client: "forgotpassword",
+          docType: 0,
+          query: fpdata
+        };
+        let redata = await invoke.makeHttpCall("post", "write", insertdata);
+        if(redata.data.errorMessage == null){
+          return true
+        }
+        else{
+          return "Error while sending mail"
+        }
       }
       else{
-        return false
+        request.valid_date = moment().format("YYYY-MM-DD");
+        request.is_active = true;
+        var insertdata = {
+          url: process.env.DB_URL,
+          client: "forgotpassword",
+          docType: 0,
+          query: request
+        };
+        let redata = await invoke.makeHttpCall("post", "write", insertdata);
+        if(redata.data.iid != undefined){
+          return true
+        }
+        else{
+          return "Error while sending mail"
+        }
       }
     }
     else{
-      request.valid_date = moment().format("YYYY-MM-DD");
-      request.is_active = true;
-      var insertdata = {
-        url: process.env.DB_URL,
-        client: "forgotpassword",
-        docType: 0,
-        query: request
-      };
-      let redata = await invoke.makeHttpCall("post", "write", insertdata);
-      if(redata.data.iid != undefined){
-        return true
-      }
-      else{
-        return false
-      }
+      return "Email doesn't exist"
     }
   } catch (err) {
     return { status: false };
