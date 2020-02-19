@@ -27,7 +27,7 @@ let sendforgotpasswordmail = async request => {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 0,
-      query: { email: request.email }
+      query: { email: request.email, is_staff : request.is_staff }
     };
     let redata = await invoke.makeHttpCall("post", "read", postdata);
     if (redata.data.statusMessage != undefined) {
@@ -86,7 +86,7 @@ let insertmailtofp = async request => {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 0,
-      query: { email: request.email }
+      query: { email: request.email, is_staff : request.is_staff }
     };
     let readata = await invoke.makeHttpCall("post", "read", post_data);
     if (readata.data.statusMessage != undefined) {
