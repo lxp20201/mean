@@ -182,7 +182,7 @@ let checklink = async (data) => {
       }
     }
     else {
-      return false
+      return "User Email Doesn't exist"
     }
   } catch (error) {
     console.log(error)
