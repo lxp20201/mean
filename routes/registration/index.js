@@ -19,13 +19,28 @@ module.exports = function (params) {
 
   app.post("/passwordencrypt", async (req, res) => {
     "use strict";
-    try{
-    var password_response = await registerSevices.passwordencrypt(req.body);  
-      app.http.customResponse(res, { success: true, message: password_response}, 200);
-  } catch (err) {
-    app.http.customResponse(res, { success: false, message: err }, 200);
-  }
-});
+    try {
+      var check_link = await registerSevices.checklink(req.body);
+      if (check_link.status == true) {
+        var password_response = await registerSevices.passwordencrypt(req.body);
+        if (password_response == "Password updated successfully") {
+          req.body._id = check_link._id
+          var updatefp = await registerSevices.updatelinkstatus(req.body);
+          if (updatefp == true) {
+            app.http.customResponse(res, { success: true, message: password_response }, 200);
+          }
+          else {
+            app.http.customResponse(res, { success: false, message: "Error in updating password" }, 200);
+          }
+        }
+      }
+      else {
+        app.http.customResponse(res, { success: false, message: check_link }, 200);
+      }
+    } catch (err) {
+      app.http.customResponse(res, { success: false, message: err }, 200);
+    }
+  });
 
   app.post("/updatestatus", async (req, res) => {
     "use strict";

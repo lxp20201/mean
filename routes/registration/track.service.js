@@ -6,6 +6,7 @@ const util = require('util');
 const query = util.promisify(connection.query).bind(connection);
 const pbkdf2 = require('pbkdf2')
 var randomstring = require("randomstring");
+var moment = require("moment");
 
 let putRecord = async orderdata => {
   return await OrderService.SaveOrder(orderdata);
@@ -129,6 +130,71 @@ let passwordencrypt = async (data) => {
   }
 }
 
+let updatelinkstatus = async (data) => {
+  try {
+    data.is_active = false
+    delete data.password
+    var postdata = {
+      url: process.env.DB_URL,
+      client: "forgotpassword",
+      docType: 0,
+      query: data
+    };
+    let responsedata = await invoke.makeHttpCall("post", "userwrite", postdata);
+    if (responsedata.data.errorMessage == null) {
+      return true
+    }
+    else {
+      return false
+    }
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
+
+let checklink = async (data) => {
+  try {
+    var postdata = {
+      url: process.env.DB_URL,
+      client: "forgotpassword",
+      docType: 0,
+      query: { email: data.email }
+    };
+    let responsedata = await invoke.makeHttpCall("post", "read", postdata);
+    if (responsedata.data.statusMessage != undefined) {
+      var fp_data = responsedata.data.statusMessage
+      if (fp_data.is_active == true) {
+        var current_date = moment().format("YYYY-MM-DD");
+        if (fp_data.valid_date == current_date) {
+          var checklink_response = {
+            status : true,
+            _id : fp_data._id
+          }
+          return checklink_response
+        }
+        else {
+          return 'Link Expired'
+        }
+      }
+      else {
+        return 'Link Verified'
+      }
+    }
+    else {
+      return false
+    }
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+}
+
 module.exports = {
-  putRecord, update_status, externalregistration, passwordencrypt
+  putRecord,
+  update_status,
+  externalregistration,
+  passwordencrypt,
+  updatelinkstatus,
+  checklink
 };

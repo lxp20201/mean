@@ -3,6 +3,7 @@ var nodemailer = require('nodemailer');
 var handlebars = require('handlebars');
 var fs = require("fs");
 const util = require('util');
+var moment = require("moment");
 
 let checkemail = async request => {
   try {
@@ -78,7 +79,57 @@ let sendforgotpasswordmail = async request => {
     return { status: false };
   }
 }
+
+let insertmailtofp = async request => {
+  try {
+    var postdata = {
+      url: process.env.DB_URL,
+      client: "forgotpassword",
+      docType: 0,
+      query: { email: request.email }
+    };
+    let re_data = await invoke.makeHttpCall("post", "read", postdata);
+    if(re_data.data.statusMessage != undefined){
+      var fpdata = re_data.data.statusMessage
+      fpdata.is_active = true
+      fpdata.valid_date = moment().format("YYYY-MM-DD");
+      var insertdata = {
+        url: process.env.DB_URL,
+        client: "forgotpassword",
+        docType: 0,
+        query: fpdata
+      };
+      let redata = await invoke.makeHttpCall("post", "write", insertdata);
+      if(redata.data.errorMessage == null){
+        return true
+      }
+      else{
+        return false
+      }
+    }
+    else{
+      request.valid_date = moment().format("YYYY-MM-DD");
+      request.is_active = true;
+      var insertdata = {
+        url: process.env.DB_URL,
+        client: "forgotpassword",
+        docType: 0,
+        query: request
+      };
+      let redata = await invoke.makeHttpCall("post", "write", insertdata);
+      if(redata.data.iid != undefined){
+        return true
+      }
+      else{
+        return false
+      }
+    }
+  } catch (err) {
+    return { status: false };
+  }
+}
 module.exports = {
   checkemail,
-  sendforgotpasswordmail
+  sendforgotpasswordmail,
+  insertmailtofp
 };
