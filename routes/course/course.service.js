@@ -74,8 +74,29 @@ let updatecourse = async request => {
     }
 };
 
+let addcourseexternal = async request => {
+    try {
+        request.display_name = request.course_name
+        var response = await invoke.makeHttpCallpolyglotCMS("post", "/course/", request);
+        if(response.status == 200){
+            return response.data
+        }
+        else{
+            return false
+        }
+    } catch (err) {
+        if(err.response.status == 403){
+            return true
+        }
+        else{
+            return err.response.data
+        }
+    }
+};
+
 module.exports = {
     addcourse,
     viewcourse,
-    updatecourse
+    updatecourse,
+    addcourseexternal
 };

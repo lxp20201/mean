@@ -5,12 +5,18 @@ module.exports = function (params) {
     app.post("/addcourse", async (req, res) => {
         "use strict";
         try {
-            var insert_details = await trackSevices.addcourse(req.body);
-            if (insert_details != false) {
-                app.http.customResponse(res, { success: true, message: "Course Added Successfully" }, 200);
+            var addcourse = await trackSevices.addcourseexternal(req.body);
+            if (addcourse == true) {
+                var insert_details = await trackSevices.addcourse(req.body);
+                if (insert_details != false) {
+                    app.http.customResponse(res, { success: true, message: "Course Added Successfully" }, 200);
+                }
+                else {
+                    app.http.customResponse(res, { success: false, message: "Error in Adding Course" }, 200);
+                }
             }
-            else {
-                app.http.customResponse(res, { success: false, message: "Error in Adding Course" }, 200);
+            else{
+                app.http.customResponse(res, { success: false, message: addcourse }, 200); 
             }
         } catch (err) {
             var errorCode = 402;
