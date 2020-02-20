@@ -9,8 +9,10 @@ module.exports = function (params) {
       var check_email_status = await loginservice.checkemail(req.body);
       if (check_email_status.statusMessage.length != 0) {
         let redata = await trigger.openedxCall("post", "/user_api/v1/account/login_session/", req.body);
-        if (redata.data == "") {
-          app.http.customResponse(res, { success: true, message: "Login Successfully", token: redata.headers }, 200);
+        if (redata.data == "") {          
+          check_email_status.statusMessage[0].token = redata.headers['set-cookie'];
+          check_email_status.statusMessage[0].message = "Login Successfully";
+          app.http.customResponse(res, { success: true, message: check_email_status.statusMessage }, 200);
         }
       } else {
         app.http.customResponse(res, { success: false, message: "Email or password is incorrect" }, 200);
