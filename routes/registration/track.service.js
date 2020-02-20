@@ -50,6 +50,12 @@ let update_status = async (data) => {
 let externalregistration = async (request) => {
   try {
     var payload = request;
+    if(request.is_staff == true){
+      payload.is_staff = 1
+    }
+    else if(request.is_staff == false){
+      payload.is_staff = 0
+    }
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
     console.log(response.data);
     if (response.data.success == true) {
