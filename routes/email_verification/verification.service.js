@@ -21,7 +21,8 @@ let verifyemail = async request => {
     var template = handlebars.compile(outcome);
     var replacements = {
       name: request.name,
-      email: request.email
+      email: request.email,
+      staff : request.is_staff
     };
     var htmlToSend = template(replacements);
     // create reusable transporter object using the default SMTP transport
