@@ -54,6 +54,31 @@ let viewcourse = async request => {
     }
 };
 
+let viewcoursebyid = async request => {
+    try {
+        if (request.user_id != undefined) {
+            var postdata = {
+                url: process.env.DB_URL,
+                client: "course",
+                docType: 1,
+                query: { user_id: request.user_id ,_id:request._id, is_active: true }
+            };
+            let coursedata = await invoke.makeHttpCall("post", "read", postdata);
+            if (coursedata.data.statusMessage != undefined) {
+                return coursedata.data.statusMessage
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false
+        }
+    } catch (err) {
+        return { status: false };
+    }
+};
+
 let updatecourse = async request => {
     try {
         var postdata = {
@@ -98,5 +123,6 @@ module.exports = {
     addcourse,
     viewcourse,
     updatecourse,
-    addcourseexternal
+    addcourseexternal,
+    viewcoursebyid
 };
