@@ -7,11 +7,17 @@ var moment = require("moment");
 
 let checkemail = async request => {
   try {
+    var staff_
+    if(request.is_staff == true){
+      staff_ = 1;
+    }else{
+      staff_ = 0;
+    }
     var postdata = {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 1,
-      query: { email: request.email, password: request.password, is_staff : request.is_staff }
+      query: { email: request.email, password: request.password, is_staff : staff_ }
     };
     let redata = await invoke.makeHttpCall("post", "read", postdata);
     response = redata;
