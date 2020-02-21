@@ -14,17 +14,11 @@ let adminuserdashboard = async request => {
             return false
         }
         else{
-            var staff_
-            if(request.is_staff == true){
-              staff_ = 1;
-            }else{
-              staff_ = 0;
-            }
             var readdata = {
                 url: process.env.DB_URL,
                 client: "auth_user",
                 docType: 1,
-                query: { is_staff: staff_, is_superuser : false }
+                query: { is_staff: request.is_staff, is_superuser : false }
             };
             let response_data = await invoke.makeHttpCall("post", "read", readdata);
             if (response_data.data.statusMessage != undefined) {

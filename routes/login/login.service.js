@@ -7,17 +7,11 @@ var moment = require("moment");
 
 let checkemail = async request => {
   try {
-    var staff_
-    if(request.is_staff == true){
-      staff_ = 1;
-    }else{
-      staff_ = 0;
-    }
     var postdata = {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 1,
-      query: { email: request.email, password: request.password, is_staff : staff_ }
+      query: { email: request.email, password: request.password, is_staff : request.is_staff }
     };
     let redata = await invoke.makeHttpCall("post", "read", postdata);
     response = redata;
@@ -29,17 +23,11 @@ let checkemail = async request => {
 
 let sendforgotpasswordmail = async request => {
   try {
-    var staff_
-    if(request.is_staff == true){
-      staff_ = 1;
-    }else{
-      staff_ = 0;
-    }
     var postdata = {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 0,
-      query: { email: request.email, is_staff : staff_ }
+      query: { email: request.email, is_staff : request.is_staff }
     };
     let redata = await invoke.makeHttpCall("post", "read", postdata);
     if (redata.data.statusMessage != undefined) {
@@ -95,17 +83,11 @@ let sendforgotpasswordmail = async request => {
 
 let insertmailtofp = async request => {
   try {
-    var staff_
-    if(request.is_staff == true){
-      staff_ = 1;
-    }else{
-      staff_ = 0;
-    }
     var post_data = {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 0,
-      query: { email: request.email, is_staff : staff_ }
+      query: { email: request.email, is_staff : request.is_staff }
     };
     let readata = await invoke.makeHttpCall("post", "read", post_data);
     if (readata.data.statusMessage != undefined) {
