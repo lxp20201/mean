@@ -11,7 +11,7 @@ let checkemail = async request => {
       url: process.env.DB_URL,
       client: "auth_user",
       docType: 1,
-      query: { email: request.email, password: request.password, is_staff : request.is_staff }
+      query: { email: request.email, password: request.password, is_staff : request.is_staff, is_superuser : request.is_superuser }
     };
     let redata = await invoke.makeHttpCall("post", "read", postdata);
     response = redata;
