@@ -7,6 +7,7 @@ module.exports = function (params) {
     "use strict";
     try {
       var check_email_status = await loginservice.checkemail(req.body);
+      delete req.body.is_superuser
       if (check_email_status.statusMessage.length != 0) {
         let redata = await trigger.openedxCall("post", "/user_api/v1/account/login_session/", req.body);
         if (redata.data == "") {          
