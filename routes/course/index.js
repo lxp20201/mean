@@ -71,4 +71,20 @@ module.exports = function (params) {
             app.http.customResponse(res, err, errorCode);
         }
     });
+
+    app.post("/enrollcourse", async (req, res) => {
+        "use strict";
+        try {
+            var course_details = await trackSevices.enrollcourse(req.body);
+            if (course_details != false) {
+                app.http.customResponse(res, { success: true, message: "Course Enrolled successfully" }, 200);
+            }
+            else {
+                app.http.customResponse(res, { success: false, message: "Error in Enrolling Course" }, 200);
+            }
+        } catch (err) {
+            var errorCode = 402;
+            app.http.customResponse(res, err, errorCode);
+        }
+    });
 };

@@ -119,10 +119,31 @@ let addcourseexternal = async request => {
     }
 };
 
+let enrollcourse = async request => {
+    try {
+        var postdata = {
+            url: process.env.DB_URL,
+            client: "enroll_course",
+            docType: 0,
+            query: request
+        };
+        let coursedata = await invoke.makeHttpCall("post", "write", postdata);
+        if (coursedata.data.iid != undefined) {
+            return true
+        }
+        else {
+            return false
+        }
+    } catch (err) {
+        return { status: false };
+    }
+};
+
 module.exports = {
     addcourse,
     viewcourse,
     updatecourse,
     addcourseexternal,
-    viewcoursebyid
+    viewcoursebyid,
+    enrollcourse
 };
