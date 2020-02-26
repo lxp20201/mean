@@ -121,18 +121,37 @@ let addcourseexternal = async request => {
 
 let enrollcourse = async request => {
     try {
-        var postdata = {
-            url: process.env.DB_URL,
-            client: "enroll_course",
-            docType: 0,
-            query: request
-        };
-        let coursedata = await invoke.makeHttpCall("post", "write", postdata);
-        if (coursedata.data.iid != undefined) {
-            return true
+        if ((request.course_id == null || request.course_id == undefined) 
+        || (request.customer_id == null || request.customer_id == undefined)
+        || (request.creator_id == null || request.creator_id == undefined)) {
+            return "Either Course Id, customer Id or Creator Id is missing"
         }
         else {
-            return false
+            var postdataa = {
+                url: process.env.DB_URL,
+                client: "enroll_course",
+                docType: 0,
+                query: { course_id: request.course_id, customer_id: request.customer_id }
+            };
+            let coursedataa = await invoke.makeHttpCall("post", "read", postdataa);
+            if (coursedataa.data.statusMessage == undefined) {
+                var postdata = {
+                    url: process.env.DB_URL,
+                    client: "enroll_course",
+                    docType: 0,
+                    query: request
+                };
+                let coursedata = await invoke.makeHttpCall("post", "write", postdata);
+                if (coursedata.data.iid != undefined) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+            else {
+                return "course already enrolled"
+            }
         }
     } catch (err) {
         return { status: false };

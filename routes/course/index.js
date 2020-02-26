@@ -76,7 +76,13 @@ module.exports = function (params) {
         "use strict";
         try {
             var course_details = await trackSevices.enrollcourse(req.body);
-            if (course_details != false) {
+            if(course_details == "course already enrolled"){
+                app.http.customResponse(res, { success: false, message: course_details }, 200);
+            }
+            else if(course_details == "Either Course Id, customer Id or Creator Id is missing"){
+                app.http.customResponse(res, { success: false, message: course_details }, 200);
+            }
+            else if (course_details != false) {
                 app.http.customResponse(res, { success: true, message: "Course Enrolled successfully" }, 200);
             }
             else {
