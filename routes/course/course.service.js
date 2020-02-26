@@ -10,6 +10,7 @@ const qs = require('querystring');
 
 let addcourse = async request => {
     try {
+        request.course_content = JSON.parse(request.course_content);
         request.is_active = true
         var postdata = {
             url: process.env.DB_URL,
