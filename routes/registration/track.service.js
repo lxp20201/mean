@@ -50,12 +50,6 @@ let update_status = async (data) => {
 let externalregistration = async (request) => {
   try {
     var payload = request;
-    if(request.is_staff == true){
-      payload.is_staff = 1
-    }
-    else if(request.is_staff == false){
-      payload.is_staff = 0
-    }
     var response = await invoke.makeHttpCallpolyglot("post", "/user_api/v1/account/registration/", payload);
     console.log(response.data);
     if (response.data.success == true) {
@@ -78,6 +72,12 @@ let externalregistration = async (request) => {
         user_detail: request
       }
       console.log(result);
+      if(request.is_staff == true){
+        const rows = await query("UPDATE auth_user set is_active = " + 1 + " where email='" + request.email + "'");
+      }
+      else if(request.is_staff == false){
+        const rows = await query("UPDATE auth_user set is_active = " + 0 + " where email='" + request.email + "'");
+      }
       return result;
     }
     else {
