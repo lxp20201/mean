@@ -1,11 +1,10 @@
 const assert = require('chai').assert;
 var expect = require('chai').expect;
 var should = require('chai').should;
-// var request = require('request');
 var axios = require('axios');
 
 describe('Admin test cases', function () {
-    it('admin user dashboard should return ', function (done) {
+    it('admin user dashboard api call', function (done) {
         var input = {
             "is_staff": true
         }
@@ -16,4 +15,4 @@ describe('Admin test cases', function () {
         });
         done();
     });
-})
+});
