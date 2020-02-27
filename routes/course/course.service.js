@@ -41,7 +41,17 @@ let viewcourse = async request => {
             };
             let coursedata = await invoke.makeHttpCall("post", "read", postdata);
             if (coursedata.data.statusMessage != undefined) {
-                return coursedata.data.statusMessage
+                var response = await invoke.makeHttpCallpolyglot("get", "/api/courses/v1/courses/");
+                if (response.data.results.length > 0) {
+                    var result = {
+                        mean_response: coursedata.data.statusMessage,
+                        polyglot_response: response.data.results
+                    }
+                    return result
+                }
+                else {
+                    return false
+                }
             }
             else {
                 return false
