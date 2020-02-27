@@ -73,10 +73,10 @@ let externalregistration = async (request) => {
       }
       console.log(result);
       if(request.is_staff == true){
-        const rows = await query("UPDATE auth_user set is_active = " + 1 + " where email='" + request.email + "'");
+        const rows = await query("UPDATE auth_user set is_staff = " + 1 + " where email='" + request.email + "'");
       }
       else if(request.is_staff == false){
-        const rows = await query("UPDATE auth_user set is_active = " + 0 + " where email='" + request.email + "'");
+        const rows = await query("UPDATE auth_user set is_staff = " + 0 + " where email='" + request.email + "'");
       }
       return result;
     }
