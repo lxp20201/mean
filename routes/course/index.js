@@ -7,36 +7,27 @@ module.exports = function (params) {
         try {
             var addcourse = await trackSevices.addcourseexternal(req.body);
             if (addcourse != false) {
-                req.body.polyglotresponse = addcourse
-                var insert_details = await trackSevices.addcourse(req.body);
-                if (insert_details != false) {
-                    app.http.customResponse(res, { success: true, message: "Course Added Successfully",course_key : addcourse.course_key }, 200);
+                var course_key = {
+                    course_key: addcourse.course_key
                 }
-                else {
+                var getcoursecontentdata = await trackSevices.getcoursecontent(course_key);
+                if (getcoursecontentdata != false) {
+                    req.body.polyglot_course_response = addcourse
+                    req.body.polyglot_course_response.courseid = getcoursecontentdata.id
+                    var insert_details = await trackSevices.addcourse(req.body);
+                    if (insert_details != false) {
+                        app.http.customResponse(res, { success: true, message: "Course Added Successfully", course_key: addcourse.course_key }, 200);
+                    }
+                    else {
+                        app.http.customResponse(res, { success: false, message: "Error in Adding Course" }, 200);
+                    }
+                }
+                else{
                     app.http.customResponse(res, { success: false, message: "Error in Adding Course" }, 200);
                 }
             }
-            else{
-                app.http.customResponse(res, { success: false, message: addcourse }, 200); 
-            }
-        } catch (err) {
-            var errorCode = 402;
-            app.http.customResponse(res, err, errorCode);
-        }
-    });
-
-    app.post("/getcoursecontentfrompolyglot", async (req, res) => {
-        "use strict";
-        try {
-            var getcoursecontentdata = await trackSevices.getcoursecontent(req.body);
-            if(getcoursecontentdata == "please provide your course key for getting the course content"){
-                app.http.customResponse(res, { success: false, message: getcoursecontentdata }, 200);
-            }
-            else if (getcoursecontentdata != false) {
-                app.http.customResponse(res, { success: true, message: getcoursecontentdata }, 200);
-            }
             else {
-                app.http.customResponse(res, { success: false, message: "Error in adding course content" }, 200);
+                app.http.customResponse(res, { success: false, message: addcourse }, 200);
             }
         } catch (err) {
             var errorCode = 402;
@@ -47,12 +38,18 @@ module.exports = function (params) {
     app.post("/addcoursecontent", async (req, res) => {
         "use strict";
         try {
-            var addcoursecontentdata = await trackSevices.addcoursecontent(req.body);
-            if (addcoursecontentdata != false) {
-                app.http.customResponse(res, { success: true, message: addcoursecontentdata }, 200);
+            var field_check = await trackSevices.checkingfield(req.body);
+            if (field_check == true) {
+                var addcoursecontentdata = await trackSevices.addcoursecontent(req.body);
+                if (addcoursecontentdata != false) {
+                    app.http.customResponse(res, { success: true, message: addcoursecontentdata }, 200);
+                }
+                else {
+                    app.http.customResponse(res, { success: false, message: "Error in adding course content" }, 200);
+                }
             }
             else {
-                app.http.customResponse(res, { success: false, message: "Error in adding course content" }, 200);
+                app.http.customResponse(res, { success: false, message: field_check }, 200);
             }
         } catch (err) {
             var errorCode = 402;

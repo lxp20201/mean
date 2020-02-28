@@ -7,6 +7,7 @@ const query = util.promisify(connection.query).bind(connection);
 var pbkdf2 = require('pbkdf2')
 const passwordHash = require('pbkdf2-password-hash')
 const qs = require('querystring');
+var _ = require("underscore");
 
 let addcourse = async request => {
     try {
@@ -189,22 +190,55 @@ let getcoursecontent = async request => {
 let addcoursecontent = async request => {
     try {
         var polyglot_param = {
-            parent_locator: request.id,
-            "category": "section",
+            parent_locator: request.courseid,
+            "category": request.category,
             "display_name": request.section_name
         }
-        var response = await invoke.makeHttpCallpolyglotCMS("post", "/xblock/" + polyglot_param);
+        var response = await invoke.makeHttpCallpolyglotCMS("post", "/xblock/", polyglot_param);
         if (response.data) {
             var postdataa = {
                 url: process.env.DB_URL,
                 client: "course",
                 docType: 1,
-                query: [{ $match: { "polyglotresponse.course_key": request.course_key } }]
+                query: [{ $match: { "polyglot_course_response.course_key": response.data.courseKey } }]
             };
             let coursedataa = await invoke.makeHttpCall("post", "aggregate", postdataa);
             if (coursedataa.data.statusMessage.length > 0) {
                 var updated_course_content = coursedataa.data.statusMessage[0];
-                updated_course_content.polyglot_course_content = response.data
+                if (request.category == "chapter") {
+                    if (updated_course_content.polyglot_course_response.section == undefined) {
+                        updated_course_content.polyglot_course_response.section = [];
+                        updated_course_content.polyglot_course_response.section.push({ chapterid: response.data.locator, content: request });
+                    }
+                    else {
+                        updated_course_content.polyglot_course_response.section.push({ chapterid: response.data.locator, content: request })
+                    }
+                }
+                else if (request.category == "sequential") {
+                    var findsectionid = _.find(updated_course_content.polyglot_course_response.section, { chapterid: request.courseid })
+                    if (findsectionid != undefined) {
+                        if (findsectionid.subsection == undefined) {
+                            findsectionid.subsection = [];
+                            findsectionid.subsection.push({ sequentialid: response.data.locator, content: request });
+                        }
+                        else {
+                            findsectionid.subsection.push({ sequentialid: response.data.locator, content: request });
+                        }
+                    }
+                }
+                else if (request.category == "vertical") {
+                    var findsectionid = _.find(updated_course_content.polyglot_course_response.section, { chapterid: request.chapterid })
+                    if (findsectionid != undefined) {
+                        var findsubsectionid = _.find(findsectionid.subsection, { sequentialid: request.courseid })
+                        if (findsubsectionid.unit == undefined) {
+                            findsubsectionid.unit = [];
+                            findsubsectionid.unit.push({ verticalid: response.data.locator, content: request });
+                        }
+                        else {
+                            findsubsectionid.unit.push({ verticalid: response.data.locator, content: request });
+                        }
+                    }
+                }
                 var postdata = {
                     url: process.env.DB_URL,
                     client: "course",
@@ -226,6 +260,32 @@ let addcoursecontent = async request => {
     }
 };
 
+let checkingfield = async request => {
+    try {
+        if(request.category == undefined){
+            return "please enter your category for course content"
+        }
+        if(request.category == "vertical"){
+            if(request.chapterid == undefined || request.courseid == undefined || request.section_name == undefined || request.category == undefined){
+                return "missing mandatory keys 1.chapterid 2.courseid 3.section_name 4.category"
+            }
+            else{
+                return true
+            }
+        }
+        else if(request.category == "sequential" || request.category == "chapter"){
+            if(request.courseid == undefined || request.section_name == undefined || request.category == undefined){
+                return "missing mandatory keys 1.courseid 2.section_name 3.category"
+            }
+            else{
+                return true
+            }
+        }
+    } catch (err) {
+        return { status: false };
+    }
+};
+
 module.exports = {
     addcourse,
     viewcourse,
@@ -234,5 +294,6 @@ module.exports = {
     viewcoursebyid,
     enrollcourse,
     getcoursecontent,
-    addcoursecontent
+    addcoursecontent,
+    checkingfield
 };
