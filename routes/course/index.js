@@ -10,7 +10,7 @@ module.exports = function (params) {
                 req.body.polyglotresponse = addcourse
                 var insert_details = await trackSevices.addcourse(req.body);
                 if (insert_details != false) {
-                    app.http.customResponse(res, { success: true, message: "Course Added Successfully" }, 200);
+                    app.http.customResponse(res, { success: true, message: "Course Added Successfully",course_key : addcourse.course_key }, 200);
                 }
                 else {
                     app.http.customResponse(res, { success: false, message: "Error in Adding Course" }, 200);
