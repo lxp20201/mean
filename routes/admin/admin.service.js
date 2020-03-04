@@ -7,7 +7,6 @@ var connection = mysql.createConnection(process.env.MYSQL_DB);
 const util = require('util');
 const query = util.promisify(connection.query).bind(connection);
 
-//To get the order details.
 let adminuserdashboard = async request => {
     try {
         if(request.is_staff == undefined){
