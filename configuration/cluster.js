@@ -1,14 +1,3 @@
-/* 
-Project Name : BoonBox
-Filename     : cluster.js
-Purpose      : Clustering is a great way to add stability to your application and drastically increase it's load capacity.
-Author       : Rajesh Kumar Ranjan
-Version      : 1.0  
-Date         : 18-11-2018  
-Receive      : 
-Add          : 
-*/
-
 var cluster = require('cluster');
 
 if (cluster.isMaster) {

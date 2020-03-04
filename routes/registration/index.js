@@ -7,16 +7,6 @@ module.exports = function (params) {
   var encodeUrl = require('encodeurl')
   var pbkdf2 = require('pbkdf2')
 
-  app.post("/apicheck", async (req, res) => {
-    "use strict";
-    try {
-
-    } catch (err) {
-      var errorCode = 402;
-      app.http.customResponse(res, err, errorCode);
-    }
-  });
-
   app.post("/checklinkstatus", async (req, res) => {
     "use strict";
     try {

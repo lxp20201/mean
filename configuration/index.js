@@ -5,7 +5,7 @@ module.exports = function (config) {
     var svcURL = "http://localhost:" 
     var logFolder = "/app/logs";
 
-    var clientDB = "mongodb://localhost:27017/hhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+    var clientDB = "mongodb://localhost:27017/db"
     if(clientDB){
        // console.log('conneced')
     }else{

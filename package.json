@@ -1,10 +1,15 @@
 {
-  "name": "middleware_complaints_data",
+  "name": "lnt_men",
   "version": "1.0.0",
   "private": true,
+  "description": "A MEN Project For Larsen and Toubro",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon ./configuration/cluster.js"
+    "start": "nodemon ./configuration/cluster.js",
+    "test": "npm test"
   },
+  "author": "P. Rahul Sai Vishnu",
+  "license": "ISC",
   "dependencies": {
     "@octetstream/object-to-form-data": "^1.1.0",
     "aws-sdk": "^2.612.0",

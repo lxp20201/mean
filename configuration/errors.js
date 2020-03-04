@@ -1,13 +1,3 @@
-/* 
-Project Name : BoonBox
-Filename     : error.js
-Purpose      : It handle the global error like view engine is not working ,404 page not found etc...
-Author       : Rajesh Kumar Ranjan
-Version      : 1.0  
-Date         : 18-11-2018  
-Receive      : 
-Add          : 
-*/
 (function(errorConfig) {
     "use strict";
   
