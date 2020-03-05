@@ -14,7 +14,7 @@ let adminuserdashboard = async request => {
         }
         else{
             var readdata = {
-                url: process.env.DB_URL,
+                url: process.env.USER_DB_URL,
                 client: "auth_user",
                 docType: 1,
                 query: { is_staff: request.is_staff, is_superuser : false }

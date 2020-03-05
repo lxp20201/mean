@@ -14,7 +14,7 @@ let addcourse = async request => {
         // request.course_content = JSON.parse(request.course_content);
         request.is_active = true
         var postdata = {
-            url: process.env.DB_URL,
+            url: process.env.COURSE_DB_URL,
             client: "course",
             docType: 0,
             query: request
@@ -35,7 +35,7 @@ let viewcourse = async request => {
     try {
         if (request.user_id != undefined) {
             var postdata = {
-                url: process.env.DB_URL,
+                url: process.env.COURSE_DB_URL,
                 client: "course",
                 docType: 1,
                 query: { user_id: request.user_id, is_active: true }
@@ -60,7 +60,7 @@ let viewcoursebyid = async request => {
     try {
         if (request.user_id != undefined) {
             var postdata = {
-                url: process.env.DB_URL,
+                url: process.env.COURSE_DB_URL,
                 client: "course",
                 docType: 1,
                 query: { user_id: request.user_id, _id: request._id, is_active: true }
@@ -84,7 +84,7 @@ let viewcoursebyid = async request => {
 let updatecourse = async request => {
     try {
         var postdata = {
-            url: process.env.DB_URL,
+            url: process.env.COURSE_DB_URL,
             client: "course",
             docType: 0,
             query: request
@@ -130,7 +130,7 @@ let enrollcourse = async request => {
         }
         else {
             var postdataa = {
-                url: process.env.DB_URL,
+                url: process.env.COURSE_DB_URL,
                 client: "enroll_course",
                 docType: 0,
                 query: { course_id: request.course_id, customer_id: request.customer_id }
@@ -138,7 +138,7 @@ let enrollcourse = async request => {
             let coursedataa = await invoke.makeHttpCall("post", "read", postdataa);
             if (coursedataa.data.statusMessage == undefined) {
                 var postdata = {
-                    url: process.env.DB_URL,
+                    url: process.env.COURSE_DB_URL,
                     client: "enroll_course",
                     docType: 0,
                     query: request
@@ -187,7 +187,7 @@ let addcoursecontent = async request => {
         var response = await invoke.makeHttpCallpolyglotCMS("post", "/xblock/", polyglot_param);
         if (response.data) {
             var postdataa = {
-                url: process.env.DB_URL,
+                url: process.env.COURSE_DB_URL,
                 client: "course",
                 docType: 1,
                 query: [{ $match: { "polyglot_course_response.course_key": response.data.courseKey } }]
@@ -230,7 +230,7 @@ let addcoursecontent = async request => {
                     }
                 }
                 var postdata = {
-                    url: process.env.DB_URL,
+                    url: process.env.COURSE_DB_URL,
                     client: "course",
                     docType: 0,
                     query: updated_course_content

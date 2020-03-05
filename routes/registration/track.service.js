@@ -18,7 +18,7 @@ let update_status = async (data) => {
     const response = await query("UPDATE auth_user SET is_active = 1 WHERE username = '" + user + "'")
     request.is_active = true
       var postdata = {
-        url: process.env.DB_URL,
+        url: process.env.USER_DB_URL,
         client: "auth_user",
         docType: 0,
         query: request
@@ -38,7 +38,7 @@ let externalregistration = async (request) => {
       request.is_active = false
       request.is_superuser = false
       var postdata = {
-        url: process.env.DB_URL,
+        url: process.env.USER_DB_URL,
         client: "auth_user",
         docType: 0,
         query: request
@@ -82,7 +82,7 @@ let passwordencrypt = async (data) => {
     const hashPassword = pbkdf2.pbkdf2Sync(password, salt2, iterations, 32, "sha256").toString("base64");  
     var final_password = 'pbkdf2_sha256$36000$'+salt2+'$'+hashPassword;
     var getdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 1,
       query: { email: data.email}
@@ -91,7 +91,7 @@ let passwordencrypt = async (data) => {
     if(userdata.data.statusMessage.length != 0){
       userdata.data.statusMessage[0].password=data.password;
     var updatedata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: userdata.data.statusMessage[0]
@@ -121,7 +121,7 @@ let updatelinkstatus = async (data) => {
     data.is_active = false
     delete data.password
     var postdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "forgotpassword",
       docType: 0,
       query: data
@@ -142,7 +142,7 @@ let updatelinkstatus = async (data) => {
 let checklink = async (data) => {
   try {
     var postdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "forgotpassword",
       docType: 0,
       query: { email: data.email }

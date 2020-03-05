@@ -8,7 +8,7 @@ var moment = require("moment");
 let checkemail = async request => {
   try {
     var postdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 1,
       query: { email: request.email, password: request.password, is_staff : request.is_staff, is_superuser : request.is_superuser }
@@ -24,7 +24,7 @@ let checkemail = async request => {
 let sendforgotpasswordmail = async request => {
   try {
     var postdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: { email: request.email, is_staff : request.is_staff }
@@ -84,7 +84,7 @@ let sendforgotpasswordmail = async request => {
 let insertmailtofp = async request => {
   try {
     var post_data = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: { email: request.email, is_staff : request.is_staff }
@@ -92,7 +92,7 @@ let insertmailtofp = async request => {
     let readata = await invoke.makeHttpCall("post", "read", post_data);
     if (readata.data.statusMessage != undefined) {
       var postdata = {
-        url: process.env.DB_URL,
+        url: process.env.USER_DB_URL,
         client: "forgotpassword",
         docType: 0,
         query: { email: request.email }
@@ -103,7 +103,7 @@ let insertmailtofp = async request => {
         fpdata.is_active = true
         fpdata.valid_date = moment().format("YYYY-MM-DD");
         var insertdata = {
-          url: process.env.DB_URL,
+          url: process.env.USER_DB_URL,
           client: "forgotpassword",
           docType: 0,
           query: fpdata
@@ -120,7 +120,7 @@ let insertmailtofp = async request => {
         request.valid_date = moment().format("YYYY-MM-DD");
         request.is_active = true;
         var insertdata = {
-          url: process.env.DB_URL,
+          url: process.env.USER_DB_URL,
           client: "forgotpassword",
           docType: 0,
           query: request

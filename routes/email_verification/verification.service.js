@@ -56,7 +56,7 @@ let verifyemail = async request => {
 let checkemail = async request => {
   try {
     var readdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: { email: request.email }
@@ -88,7 +88,7 @@ let checkemail = async request => {
 let updateuser = async request => {
   try {
     var readdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: { _id: request._id }
@@ -98,7 +98,7 @@ let updateuser = async request => {
       if (response_data.data.statusMessage.is_active == false) {
         request.is_active = true
         var postdata = {
-          url: process.env.DB_URL,
+          url: process.env.USER_DB_URL,
           client: "auth_user",
           docType: 0,
           query: request
@@ -122,7 +122,7 @@ let updateuser = async request => {
 let getuserdetails = async request => {
   try {
     var readdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: { email: request.email }
@@ -178,7 +178,7 @@ let getmysqldetailsfromserver = async request => {
 let updatesuperuserstatus = async request => {
   try {
     var readdata = {
-      url: process.env.DB_URL,
+      url: process.env.USER_DB_URL,
       client: "auth_user",
       docType: 0,
       query: { _id: request._id }
@@ -188,7 +188,7 @@ let updatesuperuserstatus = async request => {
       if (response_data.data.statusMessage.is_superuser == false) {
         request.is_superuser = true
         var postdata = {
-          url: process.env.DB_URL,
+          url: process.env.USER_DB_URL,
           client: "auth_user",
           docType: 0,
           query: request
