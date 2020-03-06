@@ -8,7 +8,7 @@ var express = require('express'),
     process.env.NODE_DEBUG="net http"
 app.use(compress());
 global.logger = require("./lib/util/logger.js");
-app.logger=require("./BoonboxLogger/logger");
+app.logger=require("./logger/logger");
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
