@@ -1,8 +1,8 @@
 'use strict';
 const winston = require('winston');
 const fs = require('fs');
-const logInfodir = 'logger/boonboxInfoLog';
-const logErrDir = 'logger/boonboxErrorLog';
+const logInfodir = 'logger/InfoLog';
+const logErrDir = 'logger/ErrorLog';
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logErrDir,logInfodir)) {
