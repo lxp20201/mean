@@ -51,7 +51,7 @@
     "multer-s3": "^2.9.0",
     "mysql": "^2.18.1",
     "node-cron": "^2.0.3",
-    "node-rules": "^4.0.2",
+    "node-rules": "^5.0.0",
     "nodemailer": "^4.7.0",
     "nodemon": "^1.18.8",
     "npm": "^6.7.0",
